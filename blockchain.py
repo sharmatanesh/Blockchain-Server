@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template,redirect,url_for
+from flask import Flask, request, jsonify, render_template
 from time import time
 from flask_cors import CORS
 from collections import OrderedDict
@@ -118,7 +118,7 @@ class Blockchain:
 
             transactions = block['transactions'][:-1]
             transaction_elements = ['sender_public_key', 'recipient_public_key', 'amount']
-            transactions = [((k, transaction[k]) for k in transaction_elements) for transaction in
+            transactions = [OrderedDict((k, transaction[k]) for k in transaction_elements) for transaction in
                             transactions]
 
             if not self.valid_proof(transactions, block['previous_hash'], block['nonce'], MINING_DIFFICULTY):
@@ -130,11 +130,11 @@ class Blockchain:
         return True
 
     def submit_transaction(self, sender_public_key, recipient_public_key, signature, amount):
-        transaction = {
+        transaction = OrderedDict({
             'sender_public_key': sender_public_key,
             'recipient_public_key': recipient_public_key,
             'amount': amount
-        }
+        })
 
         # Reward for mining a block
         if sender_public_key == MINING_SENDER:
@@ -160,21 +160,11 @@ app.config['MONGO_DBNAME'] = 'restdb'
 app.config['MONGO_URI'] ="mongodb+srv://Tanesh:953217Smh@cluster0-elkna.mongodb.net/test?retryWrites=true&w=majority"
 mysql = PyMongo(app)
 
-
 @app.route('/')
 def index():
-    return render_template('./in.html')
-@app.route('/indexxx')
-def indexxx():
     return render_template('./index.html')
-@app.route('/indexx',methods=['POST'])
-def indexx():
-    if request.form['user']=="mydick":
-        if request.form['pas']=="then suck it":
-            return render_template('./index.html')
-        else:
-            return redirect(url_for('index'))
-    return redirect(url_for('index'))
+
+
 @app.route('/configure')
 def configure():
     return render_template('./configure.html')
@@ -193,6 +183,7 @@ def get_chain():
         'chain': blockchain.chain,
         'length': len(blockchain.chain)
     }
+
     return jsonify(response), 200
 
 
@@ -221,7 +212,7 @@ def mine():
     recipient_public_key = response['transactions'][0]['recipient_public_key']
     amount = response["transactions"][0]['amount']
     from datetime import date
-    mysql.db.data1.insert({'sender_public_key':sender_public_key,'recipient_public_key':recipient_public_key,'amount':amount,'time':date.today().strftime("%Y-%m-%d")})
+    mysql.db.data1.insert_one({'sender_public_key':sender_public_key,'recipient_public_key':recipient_public_key,'amount':amount,'time':date.today().strftime("%Y-%m-%d")})
     return jsonify(response), 200
 
 
