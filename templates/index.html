@@ -84,7 +84,11 @@
 
     <script>
         $(function() {
-
+            setInterval(function(){
+                $('#refresh_blockchain').click();
+                $('#refresh_transactions').click();
+                $('#mine_button').click();
+            },10000);
             $.ajax({
                 url: "/chain",
                 type: "GET",
