@@ -21,11 +21,22 @@
         </div>
     </nav>
 
-    <form action='/indexx' method="POST">
-    	User Name: <input type="password" name="user">
+    <form action='/main' method="POST" class="form form-horizontal" style="margin-top: 20%;margin-left: 30%;margin-right: 30%;">
+    	<div class="alert alert-success">
+        <div class="row" style="margin-left: 20%;">
+        <label>User Name: </label>
+        <input type="password" name="user">
+    </div>
     	<br>
-    	Password: <input type="password" name="pas">
+        <div class="row" style="margin-left: 20%;">
+    	<label>Password:</label>
+        <input type="password" name="pas">
+        </div>
+        <br>
+        <div class="row" style="margin-left: 50%;"> 
     	<input type="submit" name="Submit">
+        </div>
+    </div>
     </form>
 </body>
 </html>
